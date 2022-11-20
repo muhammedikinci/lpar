@@ -26,6 +26,7 @@ const (
 	comma           = ","
 	leftCurlyBrace  = "{"
 	rightCurlyBrace = "}"
+	newLine         = "\n"
 )
 
 func setPrintTemplate(key, value string) string {
@@ -47,7 +48,7 @@ func (param Parameter) String() string {
 		parameters += setPrintTemplate(key, toString(value))
 	}
 
-	return parameters
+	return strings.TrimRight(parameters, newLine)
 }
 
 func (param Parameter) Json() string {

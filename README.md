@@ -17,3 +17,12 @@ log.Error(err,
     With("categoryID", categoryID),
 )
 ```
+
+String & Json String
+```go
+myParameters := lpar.Param("IDs", []int{1, 2}).
+	With("is_active", true)
+
+fmt.Println(myParameters)
+fmt.Println(myParameters.Json())
+```
