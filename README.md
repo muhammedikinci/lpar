@@ -39,6 +39,16 @@ fmt.Println(lpar.Param("ab", ab).AsJsonString())
 // {"ab":"{\"b\":\"asdasd\"}"}
 ```
 
+With Buffer
+```go
+bf := bytes.Buffer{}
+bf.WriteString("buffer string")
+
+fmt.Println(lpar.Param("test", bf).AsString())
+// output
+// test: buffer string
+```
+
 Log
 ```go
 log.Error(err, 
