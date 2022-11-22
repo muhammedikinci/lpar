@@ -87,3 +87,12 @@ func TestAsJsonStringWhenGettingNotValidJsonableStructValueShouldReturnValidValu
 
 	assert.Equal(t, "{\"json_struct\": \"{\\\"json_value\\\":null}\"}", parameter)
 }
+
+func TestAsStringWhenGettingMultipleDifferentValueShouldReturnValidValue(t *testing.T) {
+	bf := bytes.Buffer{}
+	bf.WriteString("buffer string")
+
+	parameter := Param("test", bf).With("test2", "multiple").With("test3", 123).AsString()
+
+	assert.Equal(t, "test: buffer string\ntest2: multiple\ntest3: 123", parameter)
+}
