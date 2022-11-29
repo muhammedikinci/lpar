@@ -55,41 +55,34 @@ func (param Parameter) AsJsonString() string {
 }
 
 func toString(value interface{}) string {
-	valueString := ""
-
 	kind := reflect.TypeOf(value).Kind()
 
-	if kind == reflect.Struct {
-		typeOf := reflect.TypeOf(value)
-
-		isJsonValue := false
-
-		for i := 0; i < reflect.TypeOf(value).NumField(); i++ {
-			if typeOf.Field(i).Tag.Get("json") != "" {
-				bytes, err := json.Marshal(value)
-				if err != nil {
-					return ""
-				}
-
-				valueString = fmt.Sprintf("%q", string(bytes))
-				valueString = strings.Trim(valueString, backQuote)
-
-				isJsonValue = true
-				break
-			}
-		}
-
-		if !isJsonValue {
-			switch valueType := value.(type) {
-			case bytes.Buffer:
-				valueString = valueType.String()
-			}
-		}
-	} else {
-		valueString = setVariableTemplate(value)
+	if kind != reflect.Struct {
+		return setVariableTemplate(value)
 	}
 
-	return valueString
+	typeOf := reflect.TypeOf(value)
+
+	for i := 0; i < reflect.TypeOf(value).NumField(); i++ {
+		if typeOf.Field(i).Tag.Get("json") == "" {
+			continue
+		}
+
+		bytes, err := json.Marshal(value)
+		if err != nil {
+			return ""
+		}
+
+		valueString := fmt.Sprintf("%q", string(bytes))
+		return strings.Trim(valueString, backQuote)
+	}
+
+	switch valueType := value.(type) {
+	case bytes.Buffer:
+		return valueType.String()
+	}
+
+	return ""
 }
 
 func setPrintTemplate(key, value string) string {
